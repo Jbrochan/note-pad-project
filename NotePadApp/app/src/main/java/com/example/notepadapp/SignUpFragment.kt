@@ -28,6 +28,7 @@ class SignUpFragment : Fragment() {
                     val passwordCheck = editTextSignUpPasswordCheck.text.toString()
                     if(password == passwordCheck){
                         UserDAO.insertData(context, UserData(0, Integer.parseInt(password)))
+                        mainActivity.replaceFragment(FragmentName.FRAGMENT_SIGN_IN, false, true)
                     } else {
                         val builder = AlertDialog.Builder(context)
                         builder.setTitle("비밀번호 오류")

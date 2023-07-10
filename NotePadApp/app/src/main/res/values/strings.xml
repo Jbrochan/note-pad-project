@@ -5,4 +5,7 @@
     <string name="text_sign_up_password">비밀번호</string>
     <string name="text_sign_up_password_check">비밀번호 확인</string>
     <string name="text_sign_up_button">설정 완료</string>
+
+    <string name="text_sign_in_password">비밀번호</string>
+    <string name="text_sign_in_button">로그인</string>
 </resources>
