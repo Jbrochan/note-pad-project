@@ -1,17 +1,18 @@
 package com.example.notepadapp
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notepadapp.databinding.FragmentMainBinding
-import com.example.notepadapp.databinding.FragmentSignInBinding
 import com.example.notepadapp.databinding.RowMainBinding
 
 class MainFragment : Fragment() {
@@ -31,6 +32,27 @@ class MainFragment : Fragment() {
                 title = "카테고리 목록"
                 setTitleTextColor(Color.WHITE)
                 inflateMenu(R.menu.menu_main)
+
+                setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.itemMainAdd -> {
+                            val builder = AlertDialog.Builder(context)
+                            builder.setTitle("새로운 카테고리 생성")
+                            builder.setMessage("새로운 카테고리의 이름을 입력주세요")
+                            val editText: EditText = EditText(context)
+                            builder.setView(editText)
+                            builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                var categoryName = editText.text.toString()
+                                CategoryDAO.insertData(context, CategoryData(0, categoryName))
+                                categoryList = CategoryDAO.selectAllData(context)
+                                recyclerViewMain.adapter?.notifyDataSetChanged()
+                            }
+                            builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
+                            builder.show()
+                        }
+                    }
+                    false
+                }
             }
             recyclerViewMain.run{
                 categoryList = CategoryDAO.selectAllData(context)
