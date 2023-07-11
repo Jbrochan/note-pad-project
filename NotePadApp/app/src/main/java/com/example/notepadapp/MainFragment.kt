@@ -45,6 +45,7 @@ class MainFragment : Fragment() {
                                 var categoryName = editText.text.toString()
                                 CategoryDAO.insertData(context, CategoryData(0, categoryName))
                                 categoryList = CategoryDAO.selectAllData(context)
+                                categoryList.reverse()
                                 recyclerViewMain.adapter?.notifyDataSetChanged()
                             }
                             builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
@@ -56,6 +57,7 @@ class MainFragment : Fragment() {
             }
             recyclerViewMain.run{
                 categoryList = CategoryDAO.selectAllData(context)
+                categoryList.reverse()
                 adapter = RecyclerViewAdapterClass()
                 layoutManager = LinearLayoutManager(context)
             }
@@ -71,6 +73,10 @@ class MainFragment : Fragment() {
 
             init{
                 textviewRow = rowMainBinding.textViewRowCategory
+
+                rowMainBinding.root.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
+                    mainActivity.menuInflater.inflate(R.menu.menu_main_context, contextMenu)
+                }
             }
         }
 
