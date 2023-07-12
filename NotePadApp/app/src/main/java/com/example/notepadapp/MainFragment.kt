@@ -71,11 +71,45 @@ class MainFragment : Fragment() {
         inner class ViewHolderClass(rowMainBinding: RowMainBinding) : RecyclerView.ViewHolder(rowMainBinding.root){
             var textviewRow: TextView
 
-            init{
+        init{
                 textviewRow = rowMainBinding.textViewRowCategory
 
                 rowMainBinding.root.setOnCreateContextMenuListener { contextMenu, view, contextMenuInfo ->
+                    contextMenu.setHeaderTitle("카테고리 관리")
                     mainActivity.menuInflater.inflate(R.menu.menu_main_context, contextMenu)
+                    // 카테고리 이름 수정 기능
+                    contextMenu.getItem(0).setOnMenuItemClickListener {
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("카테고리 관리")
+                        builder.setMessage("변경할 카테고리의 이름을 입력주세요")
+                        val editText: EditText = EditText(context)
+                        builder.setView(editText)
+                        builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                            var categoryName = editText.text.toString()
+                            CategoryDAO.updateData(mainActivity, CategoryData(adapterPosition+1, categoryName))
+                            categoryList = CategoryDAO.selectAllData(mainActivity)
+                            categoryList.reverse()
+                            notifyDataSetChanged()
+                        }
+                        builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
+                        builder.show()
+                        false
+                    }
+                    // 카테고리 삭제 기능
+                    contextMenu.getItem(1).setOnMenuItemClickListener {
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle("카테고리 삭제")
+                        builder.setMessage("카테고리를 삭제하시겠습니까?")
+                        builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                            CategoryDAO.deleteData(mainActivity, adapterPosition+1)
+                            categoryList = CategoryDAO.selectAllData(mainActivity)
+                            categoryList.reverse()
+                            notifyDataSetChanged()
+                        }
+                        builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
+                        builder.show()
+                        false
+                    }
                 }
             }
         }
