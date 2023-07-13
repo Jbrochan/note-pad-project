@@ -24,7 +24,7 @@ class SignInFragment : Fragment() {
         fragmentSignInBinding.run{
             buttonSignIn.run{
                 setOnClickListener {
-                    val userPassword = UserDAO.selectData(context, 1).userPassword.toString()
+                    val userPassword = mainActivity.sharedPreferences.getString("password", null)
                     val userPasswordInput = editTextSignInPassword.text.toString()
 
                     // 비밀번호가 일치할 경우 메인 화면으로 이동

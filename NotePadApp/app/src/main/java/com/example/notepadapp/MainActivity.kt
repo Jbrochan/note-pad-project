@@ -1,5 +1,6 @@
 package com.example.notepadapp
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,17 +14,20 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
     lateinit var userPassword: String
+    lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
+        sharedPreferences = getSharedPreferences("userInfo", MODE_PRIVATE)
+
         // 비밀 번호 설정 여부에 따라 회원가입과 로그인으로 분기
-        if(UserDAO.selectAllData(this@MainActivity).size == 0){
-            replaceFragment(FragmentName.FRAGMENT_SIGN_UP, false, true)
-        } else{
+        if(sharedPreferences.getString("password", null) != null){
             replaceFragment(FragmentName.FRAGMENT_SIGN_IN, false, true)
+        } else{
+            replaceFragment(FragmentName.FRAGMENT_SIGN_UP, false, true)
         }
     }
 
