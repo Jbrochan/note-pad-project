@@ -71,6 +71,7 @@ class CategoryDAO {
                 val categoryData = CategoryData(idx, categoryTitle)
                 categoryList.add(categoryData)
             }
+            categoryList.reverse()
 
             // Db 닫기
             dbHelper.close()

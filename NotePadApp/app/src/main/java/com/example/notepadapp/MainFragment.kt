@@ -34,6 +34,7 @@ class MainFragment : Fragment() {
                 inflateMenu(R.menu.menu_main)
 
                 setOnMenuItemClickListener {
+                    // 카테고리 추가 기능
                     when(it.itemId){
                         R.id.itemMainAdd -> {
                             val builder = AlertDialog.Builder(context)
@@ -45,7 +46,6 @@ class MainFragment : Fragment() {
                                 var categoryName = editText.text.toString()
                                 CategoryDAO.insertData(context, CategoryData(0, categoryName))
                                 categoryList = CategoryDAO.selectAllData(context)
-                                categoryList.reverse()
                                 recyclerViewMain.adapter?.notifyDataSetChanged()
                             }
                             builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
@@ -57,7 +57,6 @@ class MainFragment : Fragment() {
             }
             recyclerViewMain.run{
                 categoryList = CategoryDAO.selectAllData(context)
-                categoryList.reverse()
                 adapter = RecyclerViewAdapterClass()
                 layoutManager = LinearLayoutManager(context)
             }
@@ -88,7 +87,6 @@ class MainFragment : Fragment() {
                             var categoryName = editText.text.toString()
                             CategoryDAO.updateData(mainActivity, CategoryData(adapterPosition+1, categoryName))
                             categoryList = CategoryDAO.selectAllData(mainActivity)
-                            categoryList.reverse()
                             notifyDataSetChanged()
                         }
                         builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
@@ -103,7 +101,6 @@ class MainFragment : Fragment() {
                         builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
                             CategoryDAO.deleteData(mainActivity, adapterPosition+1)
                             categoryList = CategoryDAO.selectAllData(mainActivity)
-                            categoryList.reverse()
                             notifyDataSetChanged()
                         }
                         builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
