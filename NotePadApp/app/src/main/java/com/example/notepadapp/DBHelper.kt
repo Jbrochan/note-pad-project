@@ -12,6 +12,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "note_pad_database.
         """.trimMargin()
 
         sqliteDatabase?.execSQL(queryCategory)
+
+        val queryMemo = """create table if not exists MemoTable(
+            |idx integer primary key autoincrement,
+            |categoryIndex integer not null,
+            |memoTitle text not null,
+            |memoDate text not null,
+            |memoContent text not null)
+        """.trimMargin()
+
+        sqliteDatabase?.execSQL(queryMemo)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
