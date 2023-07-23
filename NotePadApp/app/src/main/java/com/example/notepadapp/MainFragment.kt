@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,9 +45,19 @@ class MainFragment : Fragment() {
                             builder.setView(editText)
                             builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
                                 var categoryName = editText.text.toString()
-                                CategoryDAO.insertData(context, CategoryData(0, categoryName))
-                                categoryList = CategoryDAO.selectAllData(context)
-                                recyclerViewMain.adapter?.notifyDataSetChanged()
+                                // 카테고리 이름 중복 체크
+                                if(CategoryDAO.selectNameData(mainActivity, categoryName) == null){
+                                    CategoryDAO.selectNameData(mainActivity, categoryName)
+                                        ?.let { it1 -> Log.d("user", it1.categoryTitle) }
+                                    CategoryDAO.insertData(context, CategoryData(0, categoryName))
+                                    categoryList = CategoryDAO.selectAllData(context)
+                                    recyclerViewMain.adapter?.notifyDataSetChanged()
+                                } else {
+                                    val builder = AlertDialog.Builder(context)
+                                    builder.setTitle("이미 존재하는 카테고리 입니다")
+                                    builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int -> }
+                                    builder.show()
+                                }
                             }
                             builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
                             builder.show()

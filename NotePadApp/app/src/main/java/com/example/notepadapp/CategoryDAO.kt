@@ -48,6 +48,39 @@ class CategoryDAO {
             return categoryData
         }
 
+        // Read Name
+        fun selectNameData(context: Context, categoryTitle: String) : CategoryData?{
+            // 쿼리문
+            val query = "select * from CategoryTable where categoryTitle = ?"
+            // ?에 들어갈 배열
+            val arg1 = arrayOf("$categoryTitle")
+            // Db 오픈
+            val dbHelper = DBHelper(context)
+
+            // Query 실행
+            val cursor = dbHelper.writableDatabase.rawQuery(query, arg1)
+            cursor.moveToNext()
+
+            try{
+                // 컬럼의 이름을 지정하여 컬럼의 순서값을 가져온다.
+                val idx1 = cursor.getColumnIndex("idx")
+                val idx2 = cursor.getColumnIndex("categoryTitle")
+
+                // 데이터를 가져온다.
+                val idx = cursor.getInt(idx1)
+                val categoryTitle = cursor.getString(idx2)
+
+                val categoryData = CategoryData(idx, categoryTitle)
+
+                // Db 닫기
+                dbHelper.close()
+
+                return categoryData
+            } catch (e: Exception){
+                return null
+            }
+        }
+
         // Read All
         fun selectAllData(context: Context) : ArrayList<CategoryData>{
             // 쿼리문
