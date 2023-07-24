@@ -95,10 +95,18 @@ class MainFragment : Fragment() {
                         val editText: EditText = EditText(context)
                         builder.setView(editText)
                         builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
-                            var categoryName = editText.text.toString()
-                            CategoryDAO.updateData(mainActivity, CategoryData(adapterPosition+1, categoryName))
-                            categoryList = CategoryDAO.selectAllData(mainActivity)
-                            notifyDataSetChanged()
+                            // 카테고리 이름 중복 체크
+                            val newCategoryTitle = editText.text.toString()
+                            if(CategoryDAO.selectNameData(mainActivity, newCategoryTitle) == null){
+                                CategoryDAO.updateData(mainActivity, newCategoryTitle, textviewRow.text.toString())
+                                categoryList = CategoryDAO.selectAllData(mainActivity)
+                                notifyDataSetChanged()
+                            } else {
+                                val builder = AlertDialog.Builder(context)
+                                builder.setTitle("이미 존재하는 카테고리 입니다")
+                                builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int -> }
+                                builder.show()
+                            }
                         }
                         builder.setNegativeButton("취소"){ dialogInterface: DialogInterface, i: Int -> }
                         builder.show()
@@ -110,7 +118,7 @@ class MainFragment : Fragment() {
                         builder.setTitle("카테고리 삭제")
                         builder.setMessage("카테고리를 삭제하시겠습니까?")
                         builder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
-                            CategoryDAO.deleteData(mainActivity, adapterPosition+1)
+                            CategoryDAO.deleteData(mainActivity, textviewRow.text.toString())
                             categoryList = CategoryDAO.selectAllData(mainActivity)
                             notifyDataSetChanged()
                         }

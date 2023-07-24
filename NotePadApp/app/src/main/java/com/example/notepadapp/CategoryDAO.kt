@@ -113,11 +113,11 @@ class CategoryDAO {
         }
 
         // Update
-        fun updateData(context: Context, categoryData: CategoryData){
+        fun updateData(context: Context, newCategoryTitle: String, oldCategoryTitle: String){
             // 쿼리문
-            val query = "update CategoryTable set categoryTitle = ? where idx = ?"
+            val query = "update CategoryTable set categoryTitle = ? where categoryTitle = ?"
             // ?에 들어갈 배열
-            val arg1 = arrayOf(categoryData.categoryTitle, categoryData.idx)
+            val arg1 = arrayOf(newCategoryTitle, oldCategoryTitle)
             // Db 오픈
             val dbHelper = DBHelper(context)
 
@@ -129,11 +129,11 @@ class CategoryDAO {
         }
 
         // Delete
-        fun deleteData(context: Context, index: Int){
+        fun deleteData(context: Context, categoryTitle: String){
             // 쿼리문
-            val query = "delete from CategoryTable where idx = ?"
+            val query = "delete from CategoryTable where categoryTitle = ?"
             // ?에 들어갈 배열
-            val arg1 = arrayOf(index)
+            val arg1 = arrayOf(categoryTitle)
             // Db 오픈
             val dbHelper = DBHelper(context)
 

@@ -4,12 +4,14 @@ import android.app.AlertDialog
 import android.content.Context.MODE_PRIVATE
 import android.content.DialogInterface
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.example.notepadapp.databinding.FragmentSignUpBinding
 
 class SignUpFragment : Fragment() {
@@ -24,6 +26,16 @@ class SignUpFragment : Fragment() {
         fragmentSignUpBinding = FragmentSignUpBinding.inflate(layoutInflater)
 
         fragmentSignUpBinding.run{
+            toolbarSignUp.run{
+                title = "회원가입"
+                setTitleTextColor(Color.WHITE)
+                inflateMenu(R.menu.menu_sign)
+                setNavigationIcon(com.google.android.material.R.drawable.ic_m3_chip_close)
+                setNavigationOnClickListener {
+                    mainActivity.removeFragment(FragmentName.FRAGMENT_SIGN_UP)
+                    Log.d("user", "navigation clicked")
+                }
+            }
             buttonSignUp.run{
                 setOnClickListener {
                     val password = editTextSignUpPassword.text.toString()
